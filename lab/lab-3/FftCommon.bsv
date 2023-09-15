@@ -54,4 +54,3 @@ function Vector#(FftPoints,ComplexData) permute(Vector#(FftPoints,ComplexData) i
     end
     return outVector;
 endfunction
-

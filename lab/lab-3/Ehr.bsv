@@ -83,4 +83,3 @@ module mkEhrU( Ehr#(n,t) ) provisos(Bits#(t, tSz));
     let m <- mkEhr( ? );
     return m;
 endmodule
-
