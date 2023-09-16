@@ -251,7 +251,7 @@ module mkFftSuperFolded(SuperFoldedFft#(radix)) provisos(Div#(TDiv#(FftPoints, 4
     function Vector#(FftPoints, ComplexData) stage_f(Bit#(6) stage, Vector#(FftPoints, ComplexData) stage_in);
         Vector#(FftPoints, ComplexData) stage_temp = stage_in;
         for (Bit#(6) i = 0; i < ub; i = i + 1)  begin
-            let idx = ({0,stage[3:0]}+i) * 4;
+            FftIdx idx = ({0,stage[3:0]}+i) * 4;
             Vector#(4, ComplexData) x;
             Vector#(4, ComplexData) twid;
             Bit#(3) rs = {0 , stage[5:4]};
@@ -283,10 +283,10 @@ module mkFftSuperFolded(SuperFoldedFft#(radix)) provisos(Div#(TDiv#(FftPoints, 4
         //     single <= 0;
         // end
         let sxIn = ?;
-        if (single[5:4] == 0) begin inFifo.deq; sxIn = inFifo.first; end
+        if (single == 0) begin inFifo.deq; sxIn = inFifo.first; end
         else sxIn = stage_data;
         let sxOut = stage_f(single, sxIn);
-        if (single[5:4] == 3) begin outFifo.enq(sxOut); single <= 0; end
+        if (single == 48 - ub) begin outFifo.enq(sxOut); single <= 0; end
         else begin stage_data <= sxOut; single <= single + ub; end
     endrule
 
